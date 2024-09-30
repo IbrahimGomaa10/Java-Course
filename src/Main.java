@@ -19,45 +19,43 @@ public class Main {
 
         // mortgage
 
-        final int Percent = 100;
-        final int year_to_month = 12;
         int principal = 0;
-        float monthly_rate = 1;
-        int monthly_period = 1;
-        Scanner scanner = new Scanner(System.in);
-        // principle
-        while (true) {
-            System.out.print("Please Enter The principal: ");
-             principal = scanner.nextInt();
-            if(principal >= 1000 && principal <= 1_000_000) {
-                break;
-            } else System.out.println("Please Enter The Number Between 1K to 1M");
-        }
-        // annual rate
+        float annualRate = 0;
+        byte period = 0;
 
-        while(true) {
-            System.out.print("Please Enter Annual interest Rate: ");
-            float annualRate = scanner.nextFloat();
-             monthly_rate = annualRate / Percent / year_to_month;
-            if(monthly_rate > 0 && monthly_rate <= 30) {
-                break;
-            } else System.out.println("Please Enter The Number Between 1 to 30");
-        }
+
+        // principal
+        principal = (int)(readData("Please Enter The principal: ", 1000, 1_000_000));
+//        while (true) {
+//            System.out.print("Please Enter The principal: ");
+//             principal = scanner.nextInt();
+//            if(principal >= 1000 && principal <= 1_000_000) {
+//                break;
+//            } else System.out.println("Please Enter The Number Between 1K to 1M");
+//        }
+
+        // annual rate
+         annualRate = (float) readData("Please Enter Annual interest Rate: ", 1, 30);
+//        while(true) {
+//            System.out.print("Please Enter Annual interest Rate: ");
+//             annualRate = scanner.nextFloat();
+//            if(annualRate > 0 && annualRate <= 30) break;
+//             else System.out.println("Please Enter The Number Between 1 to 30");
+//        }
 
         // period (months)
-        while (true) {
-            System.out.print("Please Enter Period: ");
-            byte period = scanner.nextByte();
-            if(period > 0 && period <= 30) {
-                monthly_period = period * year_to_month;
-                break;
-            } else System.out.println("Please Enter The Number Between 1 to 30");
-        }
+        period = (byte) readData("Please Enter Period: ", 1, 30);
+//        while (true) {
+//            System.out.print("Please Enter Period: ");
+//             period = scanner.nextByte();
+//            if(period > 0 && period <= 30) break;
+//             else System.out.println("Please Enter The Number Between 1 to 30");
+//        }
 
-        scanner.close();
+        // result of mortage
+        double mortgage = calculateMortgage(principal, annualRate, period);
 
-        // result
-        double mortgage = principal*(monthly_rate * Math.pow(1 + monthly_rate, monthly_period))/(Math.pow(1 + monthly_rate, monthly_period) - 1);
+        // turn currency
         String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
         System.out.println("Mortgage is: " + mortgageFormatted);
 
@@ -98,5 +96,28 @@ public class Main {
 //            i++;
 //        } while(i <= 5);
 
+    }
+
+    public static double readData(String message, int min, int max) {
+        Scanner scanner = new Scanner(System.in);
+        double value;
+        while (true) {
+            System.out.print(message);
+            value = scanner.nextFloat();
+            if(value >= min && value <= max) {
+                break;
+            } else System.out.println("Please Enter The Number Between " + min + " to " + max);
+        }
+        return value;
+
+    }
+
+    public static double calculateMortgage(int principal, float annualRate, byte period) {
+        final int Percent = 100;
+        final int year_to_month = 12;
+        float monthly_rate = annualRate / Percent / year_to_month;
+        int monthly_period = period * year_to_month;
+        double mortgage = principal*(monthly_rate * Math.pow(1 + monthly_rate, monthly_period))/(Math.pow(1 + monthly_rate, monthly_period) - 1);
+        return mortgage;
     }
 }
