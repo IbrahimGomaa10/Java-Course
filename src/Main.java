@@ -2,6 +2,9 @@ import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class Main {
+    final static int Percent = 100;
+    final static int year_to_month = 12;
+
     public static void main(String[] args) {
 //        int x = 1;
 //        int y = x++;
@@ -56,8 +59,10 @@ public class Main {
         double mortgage = calculateMortgage(principal, annualRate, period);
 
         // turn currency
-        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
-        System.out.println("Mortgage is: " + mortgageFormatted);
+        printMortgage(mortgage);
+        /////
+        // get balance every month
+        printBalance(period, principal, annualRate);
 
         //////////////////////////////
 
@@ -98,6 +103,23 @@ public class Main {
 
     }
 
+    private static void printMortgage(double mortgage) {
+        System.out.println();
+        System.out.println("Mortgage");
+        System.out.println("---------------");
+        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
+        System.out.println("Mortgage is: " + mortgageFormatted);
+    }
+
+    private static void printBalance(byte period, int principal, float annualRate) {
+        System.out.println();
+        System.out.println("Balanace");
+        for(short months = 1; months <= period * year_to_month; months++) {
+            double balance = calculateBalance(principal, annualRate, period, months);
+            System.out.println(NumberFormat.getCurrencyInstance().format(balance));
+        }
+    }
+
     public static double readData(String message, int min, int max) {
         Scanner scanner = new Scanner(System.in);
         double value;
@@ -112,9 +134,16 @@ public class Main {
 
     }
 
+    public static double calculateBalance(int principal, float annualRate, byte period, short numberOfPayment) {
+        float monthly_rate = annualRate / Percent / year_to_month;
+        float monthly_period = period * year_to_month;
+        double balance = principal *
+                (Math.pow(1 + monthly_rate, monthly_period) - Math.pow(1 + monthly_rate, numberOfPayment))
+                / (Math.pow(1 + monthly_rate, monthly_period) - 1);
+        return balance;
+    }
+
     public static double calculateMortgage(int principal, float annualRate, byte period) {
-        final int Percent = 100;
-        final int year_to_month = 12;
         float monthly_rate = annualRate / Percent / year_to_month;
         int monthly_period = period * year_to_month;
         double mortgage = principal*(monthly_rate * Math.pow(1 + monthly_rate, monthly_period))/(Math.pow(1 + monthly_rate, monthly_period) - 1);
