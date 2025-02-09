@@ -1,10 +1,10 @@
 public class Main {
 
     public static void main(String[] args) {
-        Account acc1 = new Account();
-        acc1.insert(4451238, "Ibrahim", 10000);
-        acc1.deposit(12000);
-        acc1.withdraw(24000);
-        System.out.println(acc1.toString());
+        Student std1 = new Student( "Ibrahim", "123216126" );
+        Student std2 = new Student( "Mohamed", "126" );
+        System.out.println(std2.logIn("Mohamed", "126"));
+        System.out.println(Student.checkPasswordLimitation(std1));
+        System.out.println(std2.toString());
     }
 }
