@@ -1,0 +1,4 @@
+public enum Status {
+    PENDING, PREPARING, DELIVERING, COMPLETED, CANCELED;
+
+}
